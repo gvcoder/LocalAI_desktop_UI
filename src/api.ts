@@ -74,6 +74,7 @@ export const api = {
   setSessionModel: (id: string, modelId: string, provider: string) =>
     invoke<void>("set_session_model", { id, modelId, provider }),
   deleteSession: (id: string) => invoke<void>("delete_session", { id }),
+  clearMessages: (sessionId: string) => invoke<void>("clear_session_messages", { sessionId }),
   getMessages: (sessionId: string) => invoke<StoredMessage[]>("get_session_messages", { sessionId }),
   saveMessage: (sessionId: string, role: string, content: string, tokens?: number | null) =>
     invoke<StoredMessage>("save_message", { sessionId, role, content, tokens }),

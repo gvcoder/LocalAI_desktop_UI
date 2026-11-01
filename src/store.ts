@@ -24,6 +24,7 @@ interface State {
   newChat: () => void;
   deleteSession: (id: string) => Promise<void>;
   renameSession: (id: string, title: string) => Promise<void>;
+  clearChat: () => Promise<void>;
   selectModel: (m: ModelInfo) => void;
   send: (text: string) => Promise<void>;
   stop: () => Promise<void>;
@@ -81,6 +82,13 @@ export const useStore = create<State>((set, get) => ({
   renameSession: async (id, title) => {
     await api.renameSession(id, title);
     set({ sessions: await api.listSessions() });
+  },
+
+  clearChat: async () => {
+    const id = get().activeId;
+    if (!id || get().streaming) return;
+    await api.clearMessages(id);
+    set({ messages: [], sessions: await api.listSessions() });
   },
 
   selectModel: (m) => {

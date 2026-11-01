@@ -241,5 +241,27 @@ mod tests {
         let v: Value = serde_json::from_str(r#"{"object":"list","data":[{"id":"ai/smollm2"}]}"#).unwrap();
         assert_eq!(parse_openai_models(&v)[0].id, "ai/smollm2");
     }
+
+    // Task 4.3: backends that are stopped/unreachable must report offline, not hang or panic.
+    // Port 9 (discard) on localhost is essentially never listening -> connection refused.
+    const DEAD: &str = "http://127.0.0.1:9";
+
+    #[tokio::test]
+    async fn unreachable_backend_reports_offline() {
+        let client = reqwest::Client::new();
+        for kind in [ProviderKind::Ollama, ProviderKind::Docker] {
+            let h = check_health(&client, kind, DEAD).await;
+            assert!(!h.online, "{kind:?} should be offline");
+            assert!(h.message.is_some());
+            assert!(list_models(&client, kind, DEAD).await.is_err());
+        }
+    }
+
+    #[tokio::test]
+    async fn malformed_url_is_an_error_not_a_panic() {
+        let client = reqwest::Client::new();
+        let h = check_health(&client, ProviderKind::Ollama, "not a url").await;
+        assert!(!h.online);
+    }
 }
 

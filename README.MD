@@ -15,7 +15,7 @@ Download from the release bundles:
 | Format | Use on | Install |
 | :--- | :--- | :--- |
 | `.AppImage` | Most distros (Ubuntu, Fedora, Arch, …) | `chmod +x LocalAI*.AppImage && ./LocalAI*.AppImage` |
-| `.deb` | Debian / Ubuntu / Mint | `sudo apt install ./localai-desktop*.deb` |
+| `.deb` | Debian / Ubuntu / Mint | `sudo apt install ./LocalAI*_amd64.deb` |
 
 ## Backend setup
 

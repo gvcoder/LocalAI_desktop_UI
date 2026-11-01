@@ -113,6 +113,11 @@ fn delete_session(state: State<AppState>, id: String) -> AppResult<()> {
 }
 
 #[tauri::command]
+fn clear_session_messages(state: State<AppState>, session_id: String) -> AppResult<()> {
+    db::clear_messages(&state.db.lock().unwrap(), &session_id)
+}
+
+#[tauri::command]
 fn get_session_messages(state: State<AppState>, session_id: String) -> AppResult<Vec<StoredMessage>> {
     db::get_messages(&state.db.lock().unwrap(), &session_id)
 }
@@ -140,7 +145,7 @@ pub fn run() {
             get_settings, update_settings,
             list_models, check_backend_status, chat_stream, stop_generation,
             list_sessions, create_session, rename_session, set_session_model,
-            delete_session, get_session_messages, save_message
+            delete_session, clear_session_messages, get_session_messages, save_message
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

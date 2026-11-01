@@ -19,7 +19,7 @@ A step-by-step roadmap to build, test, and package the lightweight Tauri v2 desk
   - Define Rust structs for `ModelInfo`, `ChatMessage`, `ChatCompletionRequest`, `StreamChunk`, and `HealthStatus`.
   - Implement unified error types (`AppError`) serializable to frontend.
 - [x] **Task 2.2: Local SQLite Database**
-  - Set up embedded SQLite database via `rusqlite` in `~/.local/share/localai-ui/data.db`.
+  - Set up embedded SQLite database via `rusqlite` in `~/.local/share/dev.localai.desktop/data.db`.
   - Create migrations for `sessions` and `messages` tables.
   - Implement CRUD Tauri commands: `list_sessions`, `create_session`, `delete_session`, `rename_session`, `get_session_messages`, `save_message`.
 - [x] **Task 2.3: Provider Adapters**
@@ -50,12 +50,12 @@ A step-by-step roadmap to build, test, and package the lightweight Tauri v2 desk
 ### Milestone 4: Integration, End-to-End Testing & Validation
 - [x] **Task 4.1:** Test model discovery with Ollama and Docker endpoints.
 - [x] **Task 4.2:** Test real-time token streaming, cancellation mid-response, and chat persistence across app restarts.
-- [ ] **Task 4.3:** Verify error handling when local runtimes are stopped or unreachable.
+- [x] **Task 4.3:** Verify error handling when local runtimes are stopped or unreachable. _(automated: unreachable-backend unit tests)_
 
 ---
 
 ### Milestone 5: Linux Packaging & Portability
-- [ ] **Task 5.1:** Configure Tauri packaging for `.AppImage` and `.deb` in `tauri.conf.json`.
-- [ ] **Task 5.2:** Run `npm run tauri build` to generate the portable Linux binaries in `src-tauri/target/release/bundle/`.
-- [ ] **Task 5.3:** Document installation and execution instructions in `README.md`.
+- [x] **Task 5.1:** Configure Tauri packaging for `.AppImage` and `.deb` in `tauri.conf.json`.
+- [x] **Task 5.2:** Run `npm run tauri build` to generate the portable Linux binaries in `src-tauri/target/release/bundle/`.
+- [x] **Task 5.3:** Document installation and execution instructions in `README.md`.
 

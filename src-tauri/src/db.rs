@@ -107,6 +107,12 @@ pub fn delete_session(conn: &Connection, id: &str) -> AppResult<()> {
     Ok(())
 }
 
+pub fn clear_messages(conn: &Connection, session_id: &str) -> AppResult<()> {
+    conn.execute("DELETE FROM messages WHERE session_id=?1", params![session_id])?;
+    conn.execute("UPDATE sessions SET updated_at=?2 WHERE id=?1", params![session_id, now()])?;
+    Ok(())
+}
+
 pub fn get_messages(conn: &Connection, session_id: &str) -> AppResult<Vec<StoredMessage>> {
     let mut stmt = conn.prepare(
         "SELECT id,session_id,role,content,tokens,created_at FROM messages WHERE session_id=?1 ORDER BY id ASC",
@@ -159,6 +165,10 @@ mod tests {
         assert_eq!(msgs[1].tokens, Some(3));
         rename_session(&conn, &s.id, "Renamed").unwrap();
         assert_eq!(list_sessions(&conn).unwrap()[0].title, "Renamed");
+        clear_messages(&conn, &s.id).unwrap();
+        assert!(get_messages(&conn, &s.id).unwrap().is_empty());
+        assert_eq!(list_sessions(&conn).unwrap().len(), 1); // session kept
+        save_message(&conn, &s.id, "user", "again", None).unwrap();
         delete_session(&conn, &s.id).unwrap();
         assert!(get_messages(&conn, &s.id).unwrap().is_empty()); // cascade
     }

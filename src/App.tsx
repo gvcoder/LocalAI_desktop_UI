@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import {
-  Bot, Check, ChevronDown, Copy, MessageSquare, Pencil, Plus, RefreshCw, Send, Settings as Cog, Square, Trash2, User, X,
+  Bot, Check, ChevronDown, Copy, Eraser, MessageSquare, Pencil, Plus, RefreshCw, Send, Settings as Cog, Square, Trash2, User, X,
 } from "lucide-react";
 import { useStore } from "./store";
 import type { ModelInfo, Settings } from "./api";
@@ -122,7 +122,7 @@ function Sidebar() {
 
 /* ---------------- Header / model picker ---------------- */
 function Header() {
-  const { models, selectedModel, selectModel, streaming } = useStore();
+  const { models, selectedModel, selectModel, streaming, activeId, messages, clearChat } = useStore();
   const [open, setOpen] = useState(false);
   const groups: [string, ModelInfo[]][] = [
     ["Ollama", models.filter((m) => m.provider === "ollama")],
@@ -173,6 +173,14 @@ function Header() {
           </>
         )}
       </div>
+      <button
+        onClick={() => { if (confirm("Clear all messages in this chat?")) clearChat(); }}
+        disabled={!activeId || messages.length === 0 || !!streaming}
+        title="Clear chat"
+        className="ml-auto flex items-center gap-1.5 rounded-md px-2 py-1 text-sm text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 disabled:pointer-events-none disabled:opacity-30"
+      >
+        <Eraser size={14} /> Clear
+      </button>
     </header>
   );
 }
